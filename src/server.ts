@@ -1,20 +1,10 @@
-import Fastify from 'fastify'
+import { app } from './app.js'
 import dotenv from 'dotenv'
-
 dotenv.config()
 
-const fastify = Fastify({
-    logger: true
-})
-
-fastify.get('/', function (request, reply) {
-    reply.send({ hello: 'world' })
-})
-
-// Run the server!
-fastify.listen({ port: Number(process.env.PORT) || 3000 }, function (err, address) {
+app.listen({ port: Number(process.env.PORT) || 3000 }, function (err, address) {
     if (err) {
-        fastify.log.error(err)
+        app.log.error(err)
         process.exit(1)
     }
 })
