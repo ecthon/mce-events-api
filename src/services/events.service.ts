@@ -1,6 +1,21 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
+export type EventOption = {
+    id: number
+    name: string
+    price: number
+    quantity: number
+}
 
-const events = [
+export type Event = {
+    id: number
+    title: string
+    description: string
+    date: string
+    max_people: number
+    status: string
+    options: EventOption[]
+}
+
+const events: Event[] = [
     {
         id: 1,
         title: 'Churrasquinho MCE',
@@ -41,17 +56,10 @@ const events = [
     }
 ]
 
-export async function listEvents() {
+export async function listEvents(): Promise<Event[]> {
     return events
 }
 
-export async function getEvent(request: FastifyRequest, reply: FastifyReply) {
-    const { id } = request.params as { id: string }
-    const event = events.find((item) => item.id === Number(id))
-
-    if (!event) {
-        return reply.status(404).send({ message: 'Event not found' })
-    }
-
-    return event
+export async function getEventById(id: number): Promise<Event | undefined> {
+    return events.find((item) => item.id === id)
 }
