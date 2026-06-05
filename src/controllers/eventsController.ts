@@ -1,8 +1,4 @@
-import Fastify from "fastify"
-
-export const app = Fastify({
-    logger: true
-})
+import type { FastifyReply, FastifyRequest } from 'fastify'
 
 const events = [
     {
@@ -45,8 +41,17 @@ const events = [
     }
 ]
 
-app.register((await import('./routes/events.js')).default)
+export async function listEvents() {
+    return events
+}
 
-app.get('/', async function (request, reply) {
-    return events;
-})
+export async function getEvent(request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as { id: string }
+    const event = events.find((item) => item.id === Number(id))
+
+    if (!event) {
+        return reply.status(404).send({ message: 'Event not found' })
+    }
+
+    return event
+}
